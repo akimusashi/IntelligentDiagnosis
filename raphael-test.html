@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Raphael Test</title>
+</head>
+<body>
+<div id="my-canvas" style="width: 800px;height: 600px;padding: 0;margin: 0;border: 1px solid red">
+</div>
+<script type="text/javascript" src="raphael/raphael.min.js"></script>
+<script type="text/javascript">
+    var paper = Raphael("my-canvas", 800, 600);
+    var cir = paper.circle(30, 30, 10);
+    var coloredCircle = paper.circle(55, 45, 20).attr({
+        "fill": "#17A9C6",
+        "stroke": "#2A6570",
+        "stroke-width": 2
+    });
+    var rect = paper.rect(65, 65, 120, 80).attr({
+        "fill": "#17A9C6",
+        "stroke": "#2A6570",
+        "stroke-width": 2
+    });
+    var rect1 = paper.rect(190, 65, 120, 80, 20).attr({
+        "fill": "#17A9C6",
+        "stroke": "#2A6570",
+        "stroke-width": 2
+    });
+    var ellipse = paper.ellipse(195, 245, 170, 100).attr({
+        "fill": "#17A9C6",
+        "stroke": "#2A6570",
+        "stroke-width": 2
+    });
+</script>
+</body>
+</html>
