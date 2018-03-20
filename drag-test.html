@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Drag Test</title>
+</head>
+<body>
+<div id="my-canvas" style="width: 1024px;height: 768px;padding:0;margin:0;border: 1px solid red">
+</div>
+<script type="text/javascript" src="raphael/raphael.min.js"></script>
+<script type="text/javascript">
+    var paper = Raphael("my-canvas", 1024, 768);
+    var raphaelSet = paper.set();
+    generateCircle({
+        'x': 300,
+        'y': 300,
+        'r': 50,
+        'fill': '#ffcad2',
+        'stroke': '#ff0030',
+        'stroke-width': 6
+    }, paper);
+
+    generateRectangle({
+        'x': 300,
+        'y': 300,
+        'width': 100,
+        'height': 50,
+        'r': 6,
+        'fill': '#d9ffcd',
+        'stroke': '#42ff00',
+        'stroke-width': 6
+    }, paper);
+
+    generateEllipse({
+        'x': 500,
+        'y': 400,
+        'rx': 80,
+        'ry': 60,
+        'fill': '#d7e3ff',
+        'stroke': '#004cff',
+        'stroke-width': 6
+    }, paper);
+
+    function moveEnable(element, set) {
+        var flag = true;
+        for (var i = 0, len = set.length; i < len; i++) {
+            var another = set[i];
+            if (intersects(element, another) && element.id !== another.id) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    function intersects(element1, element2) {
+        return Raphael.pathIntersectionNumber(element1.getPath(), element2.getPath()) > 0;
+    }
+
+    function generateCircle(params, paper) {
+        var r = params['r'];
+        var b = params['stroke-width'];
+        var fix = r + b / 2 + 2;
+        var cx, cy;
+        var ocx, ocy;
+        var ncx, ncy;
+        var circle = paper.circle(params['x'], params['y'], r).attr({
+            'fill': params['fill'],
+            'stroke': params['stroke'],
+            'stroke-width': b
+        }).drag(function (dx, dy) {
+            ncx = Math.min(Math.max(cx + dx, fix), paper.width - fix);
+            ncy = Math.min(Math.max(cy + dy, fix), paper.height - fix);
+            dragEllipse(this, ncx, ncy);
+            if (moveEnable(this, raphaelSet)) {
+                ocx = ncx;
+                ocy = ncy;
+            } else {
+                dragEllipse(this, ocx, ocy);
+            }
+        }, function () {
+            cx = this.attr("cx");
+            cy = this.attr("cy");
+            ocx = cx;
+            ocy = cy;
+        });
+        raphaelSet.push(circle);
+    }
+
+    function generateRectangle(params, paper) {
+        var width = params['width'];
+        var height = params['height'];
+        var b = params['stroke-width'];
+        var fix = b / 2 + 2;
+        var x, y;
+        var ox, oy;
+        var nx, ny;
+        var rectangle = paper.rect(params['x'], params['y'], width, height, params['r']).attr({
+            'fill': params['fill'],
+            'stroke': params['stroke'],
+            'stroke-width': b
+        }).drag(function (dx, dy) {
+            nx = Math.min(Math.max(x + dx, fix), paper.width - width - fix);
+            ny = Math.min(Math.max(y + dy, fix), paper.height - height - fix);
+            dragRectangle(this, nx, ny);
+            if (moveEnable(this, raphaelSet)) {
+                ox = nx;
+                oy = ny;
+            } else {
+                dragRectangle(this, ox, oy);
+            }
+        }, function () {
+            x = this.attr("x");
+            y = this.attr("y");
+            ox = x;
+            oy = y;
+        });
+        raphaelSet.push(rectangle);
+    }
+
+    function generateEllipse(params, paper) {
+        var rx = params['rx'];
+        var ry = params['ry'];
+        var b = params['stroke-width'];
+        var fix1 = rx + b / 2 + 2;
+        var fix2 = ry + b / 2 + 2;
+        var cx, cy;
+        var ocx, ocy;
+        var ncx, ncy;
+        var ellipse = paper.ellipse(params['x'], params['y'], rx, ry).attr({
+            'fill': params['fill'],
+            'stroke': params['stroke'],
+            'stroke-width': b
+        }).drag(function (dx, dy) {
+            ncx = Math.min(Math.max(cx + dx, fix1), paper.width - fix1);
+            ncy = Math.min(Math.max(cy + dy, fix2), paper.height - fix2);
+            dragEllipse(this, ncx, ncy);
+            if (moveEnable(this, raphaelSet)) {
+                ocx = ncx;
+                ocy = ncy;
+            } else {
+                dragEllipse(this, ocx, ocy);
+            }
+        }, function () {
+            cx = this.attr("cx");
+            cy = this.attr("cy");
+            ocx = cx;
+            ocy = cy;
+        });
+        raphaelSet.push(ellipse);
+    }
+
+    function dragRectangle(element, x, y) {
+        element.attr({
+            x: x,
+            y: y
+        });
+    }
+
+    function dragEllipse(element, cx, cy) {
+        element.attr({
+            cx: cx,
+            cy: cy
+        });
+    }
+</script>
+</body>
+</html>

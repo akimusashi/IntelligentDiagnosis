@@ -3,10 +3,12 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Raphael Test</title>
+    <script type="text/javascript" src="jquery/jquery.min.js"></script>
 </head>
 <body>
 <div id="my-canvas" style="width: 800px;height: 600px;padding: 0;margin: 0;border: 1px solid red">
 </div>
+<div class="extra" id="Element.drag-extra"></div>
 <script type="text/javascript" src="raphael/raphael.min.js"></script>
 <script type="text/javascript">
     var paper = Raphael("my-canvas", 800, 600);
@@ -30,6 +32,15 @@
         "fill": "#17A9C6",
         "stroke": "#2A6570",
         "stroke-width": 2
+    });
+    var tri = paper.path("M0,0L26,0L13,18L0,0").attr({
+        "fill": "#17A9C6",
+        "stroke": "#2A6570",
+        "stroke-width": 2
+    });
+
+    rect.animate({transform: "r90t100,0s1.5"}, 1000, "bounce", function () {
+        console.log("finish");
     });
 </script>
 </body>
